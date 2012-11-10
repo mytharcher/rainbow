@@ -120,8 +120,8 @@ Controllers and filters default path could be changed by passing a path config o
 
 ```javascript
 rainbow.route(app, {
-	controllers: 'your/controllers/path',
-	filters: 'your/filters/path'
+	controllers: '/your/controllers/path',
+	filters: '/your/filters/path'
 });
 ```
 
