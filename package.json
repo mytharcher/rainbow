@@ -21,7 +21,7 @@
 		"controller",
 		"filter"
 	],
-	"repository": "git://github.com/mytharcher/rainbow",
+	"repository": "git://github.com/mytharcher/rainbow.git",
 	"engines": {
 		"node": "*"
 	}
