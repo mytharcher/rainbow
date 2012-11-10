@@ -3,6 +3,8 @@ Rainbow
 
 A node [Express][] router middleware for Ajax RESTful API base on certain folder path.
 
+Rainbow mapping all HTTP request route to controllers folder each as path to file as URL.
+
 ## Installation ##
 
 ```bash
