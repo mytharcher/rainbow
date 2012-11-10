@@ -1,0 +1,28 @@
+{
+	"name": "rainbow",
+	"description": "Express router middleware for RESTful API base on certain folder path",
+	"version": "0.0.1",
+	"author": "mytharcher <mytharcher@gmail.com>",
+	"main" : "lib/rainbow",
+	"dependencies": {
+		"glob": "3.x",
+		"methods": "0.0.1"
+	},
+	"keywords": [
+		"express",
+		"middleware",
+		"web",
+		"rest",
+		"restful",
+		"router",
+		"app",
+		"api",
+		"ajax",
+		"controller",
+		"filter"
+	],
+	"repository": "git://github.com/mytharcher/rainbow",
+	"engines": {
+		"node": "*"
+	}
+}
