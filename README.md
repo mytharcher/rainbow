@@ -38,22 +38,19 @@ This is the core design for Rainbow! And it makes routing much simpler only by f
 Here writes a router `something.js` in your `controllers/` folder like this:
 
 ```javascript
-exports.get = {
-	// filters were introduced below
-	filters: ['authorization'],
-	// your real business process handler
-	process: function (req, res, next) {
-		res.send(200, 'Got you!');
-	}
+exports.get = function (req, res, next) {
+	res.send(200, 'Simple getting.');
 };
 ```
 
-If you don't need any filters, just write simplier like this:
+If you need some filters, just add a `filters` array property which contains your filters in `filters/` folder to the handle function like this:
 
 ```javascript
 exports.get = function (req, res, next) {
 	res.send(200, 'Simple getting.');
 };
+// add filters
+exports.get.filters = ['authorization'];
 ```
 
 Also you could define other HTTP methods handlers, but make sure in one file each URL! Example in `controllers/user.js`:
