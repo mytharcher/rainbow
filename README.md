@@ -74,17 +74,36 @@ exports.put = function (req, res, next) {
 
 If you want all methods to be process in only one controller(something not RESTful), just make exports to be the handle function:
 
-```
+```javascript
 module.exports = function (req, res, next) {
 	// all your process
 };
 ```
 
-#### Notice ####
+### Params ###
 
-Rainbow controllers only design for tranditional URL form like `/path?query=value` but not like `/path/user/:id` yet.
+Rainbow started to support param form URL from version 0.1.0. Now you can define your controllers URL with params resolved by native Express like this:
 
-In rich Ajax apps tranditional URL form could be more useful. However, Rainbow may consider param form URL in future versions.
+```javascript
+exports.get = function (req, res, next) {
+	var id = req.params.id;
+	// your business
+};
+
+exports.get.params = ':id?';
+```
+
+Or you can use regular expression also:
+
+```javascript
+exports.get = function (req, res, next) {
+	console.log(req.params);
+}
+
+exports.get.params = /(\d+)(?:\.\.(\d+))?/;
+```
+
+But make sure no regular expression `^` used as starter and `$` as ender, or rainbow could not resolve the expression correctly.
 
 ### Filters ###
 
