@@ -84,14 +84,14 @@ You can write controllers with coffeescript using `.coffee` in example `controll
 
 ```coffeescript
 exports.get = (req, res, next) ->
-		User.find(where: req.query.name)
-		.success (user) ->
-			res.send 200, user
+	User.find(where: req.query.name)
+	.success (user) ->
+		res.send 200, user
 
 exports.put = (req, res, next) ->
-		User.create(req.body)
-		.success (user) ->
-			res.send 201, user.id
+	User.create(req.body)
+	.success (user) ->
+		res.send 201, user.id
 ```
 
 ### Params ###
