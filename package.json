@@ -1,9 +1,9 @@
 {
 	"name": "rainbow",
 	"description": "Express router middleware for RESTful API base on certain folder path",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"author": "mytharcher <mytharcher@gmail.com>",
-	"main" : "lib/rainbow",
+	"main" : "index.js",
 	"dependencies": {
 		"glob": "3.x",
 		"methods": "0.0.1"
