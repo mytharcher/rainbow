@@ -29,9 +29,10 @@ exports.route = function (app, paths) {
 			return require(path.join(fltrDir, item));
 		});
 		
-		app[method].apply(app, [joinParam(url, router.params)]
+		app[method.toLowerCase()].apply(app, [joinParam(url, router.params)]
 			.concat(filters)
-			.concat([router]));
+			.concat([router])
+		);
 	}
 	
 	paths = paths || {};
@@ -46,8 +47,12 @@ exports.route = function (app, paths) {
 		
 		single ? route(app, 'all', url, router) :
 			methods.forEach(function (method) {
-				var eachRouter = router[method];
+				var eachRouter = router[method.toLowerCase()] || router[method.toUpperCase()];
 				if (eachRouter) {
+					if (method != method.toUpperCase()) {
+						console.log('npm rainbow: Lower case HTTP methods are deprecated. Please change ' + method + ' to upper case.');
+					}
+
 					route(app, method, url, eachRouter);
 				}
 			});

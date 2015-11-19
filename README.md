@@ -38,7 +38,7 @@ This is the core design for Rainbow! And it makes routing much simpler only by f
 Here writes a router `something.js` in your `controllers/` folder like this:
 
 ```javascript
-exports.get = function (req, res, next) {
+exports.GET = function (req, res, next) {
 	res.send(200, 'Simple getting.');
 };
 ```
@@ -46,23 +46,23 @@ exports.get = function (req, res, next) {
 If you need some filters, just add a `filters` array property which contains your filters in `filters/` folder to the handle function like this:
 
 ```javascript
-exports.get = function (req, res, next) {
+exports.GET = function (req, res, next) {
 	res.send(200, 'Simple getting.');
 };
 // add filters
-exports.get.filters = ['authorization'];
+exports.GET.filters = ['authorization'];
 ```
 
 Also you could define other HTTP methods handlers, but make sure in one file each URL! Example in `controllers/user.js`:
 
 ```javascript
-exports.get = function (req, res, next) {
+exports.GET = function (req, res, next) {
 	User.find({where: req.query.name}).success(function (user) {
 		res.send(200, user);
 	});
 };
 
-exports.put = function (req, res, next) {
+exports.PUT = function (req, res, next) {
 	User.create(req.body).success(function (user) {
 		res.send(201, user.id);
 	});
@@ -83,12 +83,12 @@ module.exports = function (req, res, next) {
 You can write controllers with coffeescript using `.coffee` in example `controllers/user.coffee`:
 
 ```coffeescript
-exports.get = (req, res, next) ->
+exports.GET = (req, res, next) ->
 	User.find(where: req.query.name)
 	.success (user) ->
 		res.send 200, user
 
-exports.put = (req, res, next) ->
+exports.PUT = (req, res, next) ->
 	User.create(req.body)
 	.success (user) ->
 		res.send 201, user.id
@@ -99,22 +99,22 @@ exports.put = (req, res, next) ->
 Rainbow started to support param form URL from version 0.1.0. Now you can define your controllers URL with params resolved by native Express like this:
 
 ```javascript
-exports.get = function (req, res, next) {
+exports.GET = function (req, res, next) {
 	var id = req.params.id;
 	// your business
 };
 
-exports.get.params = ':id?';
+exports.GET.params = ':id?';
 ```
 
 Or you can use regular expression also:
 
 ```javascript
-exports.get = function (req, res, next) {
+exports.GET = function (req, res, next) {
 	console.log(req.params);
 }
 
-exports.get.params = /(\d+)(?:\.\.(\d+))?/;
+exports.GET.params = /(\d+)(?:\.\.(\d+))?/;
 ```
 
 But make sure no regular expression `^` used as starter and `$` as ender, or rainbow could not resolve the expression correctly.
