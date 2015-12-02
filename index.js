@@ -49,8 +49,8 @@ exports.route = function (app, paths) {
 			methods.forEach(function (method) {
 				var eachRouter = router[method.toLowerCase()] || router[method.toUpperCase()];
 				if (eachRouter) {
-					if (method != method.toUpperCase()) {
-						console.log('npm rainbow: Lower case HTTP methods are deprecated. Please change ' + method + ' to upper case.');
+					if (router[method.toLowerCase()]) {
+						console.log('npm rainbow: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
 					}
 
 					route(app, method, url, eachRouter);
