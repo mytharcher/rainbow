@@ -26,7 +26,19 @@ function joinParam (url, param) {
 exports.route = function (app, paths) {
 	function route (app, method, url, router) {
 		var filters = (router.filters || []).map(function (item) {
-			return require(path.join(fltrDir, item));
+			switch(typeof item) {
+				case 'function':
+					return item;
+
+				case 'string':
+					return require(path.join(fltrDir, item));
+
+				default:
+					console.log('[rainbow]: Filter only support function or string of path.');
+					return null;
+			}
+		}).filter(function (item) {
+			return !!item;
 		});
 		
 		app[method.toLowerCase()].apply(app, [joinParam(url, router.params)]
@@ -50,7 +62,7 @@ exports.route = function (app, paths) {
 				var eachRouter = router[method.toLowerCase()] || router[method.toUpperCase()];
 				if (eachRouter) {
 					if (router[method.toLowerCase()]) {
-						console.log('npm rainbow: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
+						console.log('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
 					}
 
 					route(app, method, url, eachRouter);
