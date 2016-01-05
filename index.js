@@ -33,10 +33,17 @@ exports.route = function (app, paths) {
 			}
 
 			var filters = (instance[filters] || []).concat(router.filters || []).map(function (item) {
-				return ({
-					'function': item,
-					'string': require(path.join(fltrDir, item))
-				})[typeof item];
+				switch (typeof item) {
+					case 'function':
+						return item;
+
+					case 'string':
+						return require(path.join(fltrDir, item));
+
+					default:
+						console.error('[rainbow]: Filter only support function or string of path.');
+						return null;
+				}
 			}).filter(function (item) {
 				return !!item;
 			});

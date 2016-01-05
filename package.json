@@ -1,7 +1,7 @@
 {
 	"name": "rainbow",
 	"description": "Express router middleware for RESTful API base on certain folder path",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"author": "mytharcher <mytharcher@gmail.com>",
 	"main" : "index.js",
 	"dependencies": {

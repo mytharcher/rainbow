@@ -146,6 +146,34 @@ module.exports = function (req, res, next) {
 
 You could see filters is as same as a origin router in Express, just be put together in `filters/` folder to be interceptors like in Java SSH.
 
+Filters also support variable name of filter function in same file than string filter file name in filters directory (from v0.4):
+
+```javascript
+// controller file test.js route to [GET]/test
+function myFilter (req, res, next) {
+	// blablabla...
+	next();
+}
+
+exports.GET = function (req, res) {
+	// blablabla...
+};
+
+exports.GET.filters = [myFilter];
+```
+
+If you need some filters to be applied for all methods in an URL, you could use URL level filters definition:
+
+```javascript
+// controller file test.js route to [GET|POST]/test
+exports.GET = function (req, res) {};
+exports.POST = function (req, res) {};
+exports.POST.filters = ['validation'];
+exports.filters = ['session'];
+```
+
+When user `GET:/test` the filter `session` would run, and when `POST:/test` URL level filter `session` run first and then `validation`.
+
 ### Change default path ###
 
 Controllers and filters default path could be changed by passing a path config object to `route` function when initializing:
