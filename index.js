@@ -24,27 +24,28 @@ function joinParam (url, param) {
  *                        controllers and filters rather than defaults.
  */
 exports.route = function (app, paths) {
-	function route (app, method, url, router) {
-		var filters = (router.filters || []).map(function (item) {
-			switch(typeof item) {
-				case 'function':
-					return item;
+	function route (url, method, instance) {
+		var router = instance[method.toLowerCase()] || instance[method.toUpperCase()];
 
-				case 'string':
-					return require(path.join(fltrDir, item));
-
-				default:
-					console.log('[rainbow]: Filter only support function or string of path.');
-					return null;
+		if (router) {
+			if (instance[method.toLowerCase()]) {
+				console.warn('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
 			}
-		}).filter(function (item) {
-			return !!item;
-		});
-		
-		app[method.toLowerCase()].apply(app, [joinParam(url, router.params)]
-			.concat(filters)
-			.concat([router])
-		);
+
+			var filters = (instance[filters] || []).concat(router.filters || []).map(function (item) {
+				return ({
+					'function': item,
+					'string': require(path.join(fltrDir, item))
+				})[typeof item];
+			}).filter(function (item) {
+				return !!item;
+			});
+			
+			app[method.toLowerCase()].apply(app, [joinParam(url, router.params)]
+				.concat(filters)
+				.concat([router])
+			);
+		}
 	}
 	
 	paths = paths || {};
@@ -53,20 +54,13 @@ exports.route = function (app, paths) {
 	
 	glob.sync(ctrlDir + "/**/*.+(coffee|js)").forEach(function (file) {
 		file = file.replace(/\.[^.]*$/, '');
-		var router = require(file);
-		var single = typeof router == 'function';
+		var instance = require(file);
+		var single = typeof instance == 'function';
 		var url = file.replace(ctrlDir, '').replace(/\/index$/, '/');
 		
-		single ? route(app, 'all', url, router) :
+		single ? route(url, 'ALL', {ALL: instance}) :
 			methods.forEach(function (method) {
-				var eachRouter = router[method.toLowerCase()] || router[method.toUpperCase()];
-				if (eachRouter) {
-					if (router[method.toLowerCase()]) {
-						console.log('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
-					}
-
-					route(app, method, url, eachRouter);
-				}
+				route(url, method, instance);
 			});
 	});
 };
