@@ -38,7 +38,7 @@ This is the core design for Rainbow! And it makes routing much simpler only by f
 Here writes a router `something.js` in your `controllers/` folder like this:
 
 ```javascript
-exports.GET = function (req, res, next) {
+exports.GET = function (req, res) {
 	res.send(200, 'Simple getting.');
 };
 ```
@@ -46,7 +46,7 @@ exports.GET = function (req, res, next) {
 If you need some filters, just add a `filters` array property which contains your filters in `filters/` folder to the handle function like this:
 
 ```javascript
-exports.GET = function (req, res, next) {
+exports.GET = function (req, res) {
 	res.send(200, 'Simple getting.');
 };
 // add filters
@@ -56,13 +56,13 @@ exports.GET.filters = ['authorization'];
 Also you could define other HTTP methods handlers, but make sure in one file each URL! Example in `controllers/user.js`:
 
 ```javascript
-exports.GET = function (req, res, next) {
+exports.GET = function (req, res) {
 	User.find({where: req.query.name}).success(function (user) {
 		res.send(200, user);
 	});
 };
 
-exports.PUT = function (req, res, next) {
+exports.PUT = function (req, res) {
 	User.create(req.body).success(function (user) {
 		res.send(201, user.id);
 	});
@@ -75,7 +75,7 @@ exports.PUT = function (req, res, next) {
 If you want all methods to be process in only one controller(something not RESTful), just make exports to be the handle function:
 
 ```javascript
-module.exports = function (req, res, next) {
+module.exports = function (req, res) {
 	// all your process
 };
 ```
@@ -83,12 +83,12 @@ module.exports = function (req, res, next) {
 You can write controllers with coffeescript using `.coffee` in example `controllers/user.coffee`:
 
 ```coffeescript
-exports.GET = (req, res, next) ->
+exports.GET = (req, res) ->
 	User.find(where: req.query.name)
 	.success (user) ->
 		res.send 200, user
 
-exports.PUT = (req, res, next) ->
+exports.PUT = (req, res) ->
 	User.create(req.body)
 	.success (user) ->
 		res.send 201, user.id
@@ -99,7 +99,7 @@ exports.PUT = (req, res, next) ->
 Rainbow started to support param form URL from version 0.1.0. Now you can define your controllers URL with params resolved by native Express like this:
 
 ```javascript
-exports.GET = function (req, res, next) {
+exports.GET = function (req, res) {
 	var id = req.params.id;
 	// your business
 };
@@ -110,7 +110,7 @@ exports.GET.params = ':id?';
 Or you can use regular expression also:
 
 ```javascript
-exports.GET = function (req, res, next) {
+exports.GET = function (req, res) {
 	console.log(req.params);
 }
 
