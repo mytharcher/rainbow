@@ -13,6 +13,7 @@ function joinParam (url, param) {
 		ret = new RegExp('^' + url.replace(/([\.\-])/g, '\\$1') + '/' +
 			param.toString().replace(/^\/(\\\/)*|\/$/g, '') + '$');
 	}
+	console.log(ret);
 	return ret;
 }
 
@@ -28,10 +29,6 @@ exports.route = function (app, paths) {
 		var router = instance[method.toLowerCase()] || instance[method.toUpperCase()];
 
 		if (router) {
-			if (instance[method.toLowerCase()]) {
-				console.warn('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
-			}
-
 			var filters = (instance[filters] || []).concat(router.filters || []).map(function (item) {
 				switch (typeof item) {
 					case 'function':
@@ -67,6 +64,9 @@ exports.route = function (app, paths) {
 		
 		single ? route(url, 'ALL', {ALL: instance}) :
 			methods.forEach(function (method) {
+				if (instance[method.toLowerCase()]) {
+					console.warn('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
+				}
 				route(url, method, instance);
 			});
 	});
