@@ -13,7 +13,6 @@ function joinParam (url, param) {
 		ret = new RegExp('^' + url.replace(/([\.\-])/g, '\\$1') + '/' +
 			param.toString().replace(/^\/(\\\/)*|\/$/g, '') + '$');
 	}
-	console.log(ret);
 	return ret;
 }
 
