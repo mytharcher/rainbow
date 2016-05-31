@@ -28,7 +28,7 @@ exports.route = function (app, paths) {
 		var router = instance[method.toLowerCase()] || instance[method.toUpperCase()];
 
 		if (router) {
-			var filters = (instance[filters] || []).concat(router.filters || []).map(function (item) {
+			var filters = (instance.filters || []).concat(router.filters || []).map(function (item) {
 				switch (typeof item) {
 					case 'function':
 						return item;
