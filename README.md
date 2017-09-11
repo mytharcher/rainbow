@@ -1,7 +1,7 @@
 Rainbow
 =======
 
-[简体中文](http://mytharcher.github.com/posts/npm-rainbow.html)
+[简体中文](http://yanjunyi.com/blog/posts/npm-rainbow)
 
 A node [Express][] router middleware for Ajax RESTful API base on certain folder path.
 
