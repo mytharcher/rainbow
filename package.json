@@ -1,12 +1,23 @@
 {
 	"name": "rainbow",
 	"description": "Express router middleware for RESTful API base on certain folder path",
-	"version": "0.5.4",
+	"version": "1.0.0",
 	"author": "mytharcher <mytharcher@gmail.com>",
 	"main" : "index.js",
+	"scripts": {
+		"test": "mocha"
+	},
 	"dependencies": {
-		"glob": "3.x",
-		"methods": "1.x"
+		"glob": "7.1.2",
+		"methods": "1.1.2"
+	},
+	"peerDependencies": {
+		"express": "^4.x"
+	},
+	"devDependencies": {
+		"axios": "0.16.2",
+		"express": "^4.x",
+		"mocha": "3.5.2"
 	},
 	"keywords": [
 		"express",
@@ -24,5 +35,6 @@
 	"repository": "git://github.com/mytharcher/rainbow.git",
 	"engines": {
 		"node": "*"
-	}
+	},
+	"license": "MIT"
 }

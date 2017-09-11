@@ -24,7 +24,7 @@ var rainbow = require('rainbow');
 var app = express();
 
 // Here using Rainbow to initialize all routers
-rainbow.route(app);
+app.use('api/', rainbow());
 
 app.listen(6060);
 ```
@@ -43,14 +43,16 @@ exports.GET = function (req, res) {
 };
 ```
 
-If you need some filters, just add a `filters` array property which contains your filters in `filters/` folder to the handle function like this:
+If you need some filters, just add a `filters` array property which contains your filters each as a function to the handle function like this:
 
 ```javascript
+var authorization = require('authorization');
+
 exports.GET = function (req, res) {
 	res.send(200, 'Simple getting.');
 };
 // add filters
-exports.GET.filters = ['authorization'];
+exports.GET.filters = [authorization];
 ```
 
 Also you could define other HTTP methods handlers, but make sure in one file each URL! Example in `controllers/user.js`:
@@ -80,19 +82,7 @@ module.exports = function (req, res) {
 };
 ```
 
-You can write controllers with coffeescript using `.coffee` in example `controllers/user.coffee`:
-
-```coffeescript
-exports.GET = (req, res) ->
-	User.find(where: req.query.name)
-	.success (user) ->
-		res.send 200, user
-
-exports.PUT = (req, res) ->
-	User.create(req.body)
-	.success (user) ->
-		res.send 201, user.id
-```
+CoffeeScript file with `.coffee` suffix will not be supported from v1.0.
 
 ### Params ###
 
@@ -121,7 +111,7 @@ But make sure no regular expression `^` used as starter and `$` as ender, or rai
 
 ### Filters ###
 
-Make sure the filters you need had been defined in `filters/` folder (could be changed) as same module name, because them will be required when initilizing. Here `authorization.js` is a example for intecepting by non-authenticated user before `GET` `http://yourapp:6060/something`:
+Filter is as same as a origin middleware in Express. Define an action with filters by using `.filters` property as an array. Here `authorization.js` is a example for intecepting by non-authenticated user before `GET` `http://yourapp:6060/something`:
 
 ```javascript
 module.exports = function (req, res, next) {
@@ -144,9 +134,7 @@ module.exports = function (req, res, next) {
 };
 ```
 
-You could see filters is as same as a origin router in Express, just be put together in `filters/` folder to be interceptors like in Java SSH.
-
-Filters also support variable name of filter function in same file than string filter file name in filters directory (from v0.4):
+Filters only support function from v1.0.
 
 ```javascript
 // controller file test.js route to [GET]/test
@@ -168,24 +156,23 @@ If you need some filters to be applied for all methods in an URL, you could use 
 // controller file test.js route to [GET|POST]/test
 exports.GET = function (req, res) {};
 exports.POST = function (req, res) {};
-exports.POST.filters = ['validation'];
-exports.filters = ['session'];
+exports.POST.filters = [validation];
+exports.filters = [session];
 ```
 
 When user `GET:/test` the filter `session` would run, and when `POST:/test` URL level filter `session` run first and then `validation`.
 
 ### Change default path ###
 
-Controllers and filters default path could be changed by passing a path config object to `route` function when initializing:
+Controllers default path could be changed by passing a path config object to `route` function when initializing:
 
 ```javascript
-rainbow.route(app, {
-	controllers: '/your/controllers/path',
-	filters: '/your/filters/path'
-});
+app.use(rainbow({
+	controllers: '/your/controllers/path'
+}));
 ```
 
-These paths are all **RELATIVE** to your app path!
+These paths are all **ABSOLUTE** file path!
 
 ## Troubleshooting ##
 
