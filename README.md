@@ -24,7 +24,7 @@ var rainbow = require('rainbow');
 var app = express();
 
 // Here using Rainbow to initialize all routers
-app.use('api/', rainbow());
+app.use('/api', rainbow());
 
 app.listen(6060);
 ```
