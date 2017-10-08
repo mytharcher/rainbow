@@ -1,5 +1,3 @@
-var APP_ROOT = process.env.PWD;
-
 var path = require('path');
 
 var glob = require('glob');
@@ -17,50 +15,55 @@ function joinParam (url, param) {
 	return ret;
 }
 
-function route (url, method, instance) {
-	var router = instance[method.toLowerCase()] || instance[method.toUpperCase()];
-
-	if (router) {
-		var filters = (instance.filters || []).concat(router.filters || []);
-		var chain = filters.concat(router instanceof Array ? router : [router]);
-		var m = method.toLowerCase();
-
-		if (typeof this[m] != 'function') {
-			console.error('[rainbow]: http method "' + method + '" is not supported.');
-			return;
-		}
-		
-		this[m].apply(this,
-			[joinParam(url, router.params)].concat(chain)
-		);
-	}
-}
-
 /**
  * Main function to initialize routers of a Express app.
  * 
  * @param  {Object} paths (optional) For configure relative paths of
- *                        controllers and filters rather than defaults.
+ *                        controllers rather than defaults.
  */
 module.exports = function (options = {}) {
-	var router = express.Router();
-	var ctrlDir = options.controllers || path.join(APP_ROOT, 'controllers');
+	var middleware = express.Router();
+	var ctrlDir = path.join(path.dirname(module.parent.filename), options.controllers || 'controllers');
+	var keyRE = new RegExp('(' + methods.join('|') + ')(?:\\s+((?:\\/(.+)\\/)|([^\\/].*[^\\/])))?', 'i')
 	
 	glob.sync(ctrlDir + "/**/*.js").forEach(function (file) {
 		file = file.replace(/\.[^.]*$/, '');
 
 		var instance = require(file);
-		var single = typeof instance == 'function';
 		var url = file.replace(ctrlDir, '').replace(/\/index$/, '/');
 		
-		single ? route.call(router, url, 'ALL', {ALL: instance}) :
-			methods.forEach(function (method) {
-				if (instance[method.toLowerCase()]) {
-					console.warn('[rainbow]: Lower case HTTP methods are deprecated. Please change "' + method + '" in file:' + file + ' to upper case.');
-				}
-				route.call(router, url, method, instance);
-			});
+		Object.keys(instance).forEach(function (key) {
+			if (key === 'filters') {
+				return;
+			}
+
+			var matcher = key.match(keyRE);
+
+			if (!matcher) {
+				return console.error('[rainbow]: Router key pattern "%s" is invalid.', key);
+			}
+
+			var method = matcher[1].toLowerCase();
+
+			if (methods.indexOf(method) === -1 && method !== 'all') {
+				return console.error('[rainbow]: Unknown HTTP method "%s".', method);
+			}
+
+			if (typeof middleware[method] !== 'function') {
+				return console.error('[rainbow]: HTTP method "%s" is not supported.', method);
+			}
+
+			var router = instance[key];
+			var filters = (instance.filters || []).concat(router.filters || []);
+			var chain = filters.concat(router instanceof Array ? router : [router]);
+			var params = matcher[2] ?
+				(matcher[3] ? new RegExp(matcher[3]) : matcher[4]) :
+				router.params;
+			var pathname = joinParam(url, params);
+
+			middleware[method].apply(middleware, [pathname].concat(chain));
+		});
 	});
 
-	return router;
+	return middleware;
 };

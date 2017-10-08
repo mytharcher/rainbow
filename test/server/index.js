@@ -6,7 +6,7 @@ var rainbow = require('../../');
 var app = express();
 
 app.use('/api', rainbow({
-	controllers: __dirname + '/controllers'
+	controllers: 'controllers'
 }));
 
 var server;
