@@ -100,3 +100,13 @@ describe('url pathname with params defined via key', function () {
 		}).then(done);
 	});
 });
+
+describe('ignored controller files', function () {
+	it('GET /ignore.me should be 404', function (done) {
+		request.get('/ignore.me').then(function (res) {
+		}).catch(function (http) {
+			assert.equal(http.response.status, 404);
+		}).then(done);
+	});
+
+});

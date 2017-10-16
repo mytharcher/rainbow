@@ -6,7 +6,13 @@ var rainbow = require('../../');
 var app = express();
 
 app.use('/api', rainbow({
-	controllers: 'controllers'
+	controllers: 'controllers',
+	glob: {
+		ignore: [
+			'ignore.me.js',
+			'**.spec.js'
+		]
+	}
 }));
 
 var server;

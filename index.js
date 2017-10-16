@@ -24,9 +24,10 @@ function joinParam (url, param) {
 module.exports = function (options = {}) {
 	var middleware = express.Router();
 	var ctrlDir = path.join(path.dirname(module.parent.filename), options.controllers || 'controllers');
-	var keyRE = new RegExp('(' + methods.join('|') + ')(?:\\s+((?:\\/(.+)\\/)|([^\\/].*[^\\/])))?', 'i')
+	var keyRE = new RegExp('(' + methods.join('|') + ')(?:\\s+((?:\\/(.+)\\/)|([^\\/].*[^\\/])))?', 'i');
+	var globOptions = options.glob || {};
 	
-	glob.sync(ctrlDir + "/**/*.js").forEach(function (file) {
+	glob.sync(ctrlDir + "/**/*.js", globOptions).forEach(function (file) {
 		file = file.replace(/\.[^.]*$/, '');
 
 		var instance = require(file);

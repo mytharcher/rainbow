@@ -190,6 +190,9 @@ exports.filters = [session];
 
 When user `GET:/test` the filter `session` would run, and when `POST:/test` URL level filter `session` run first and then `validation`.
 
+Options
+----------
+
 ### Change default path ###
 
 Controllers default path could be changed by passing a path config object to `route` function when initializing:
@@ -202,8 +205,26 @@ app.use(rainbow({
 
 Path option here is **RELATIVE** path to your `app.js` file!
 
+### Glob ###
+
+From v2.1.0 you could use `glob` in options to config any option supported by npm [glob](https://www.npmjs.com/package/glob), such as excluding files.
+
+~~~javascript
+app.use(rainbow({
+	glob: {
+		ignore: [
+			'**.spec.js' // any spec file for test cases will be ignored from controller folder
+		]
+	}
+}));
+~~~
+
 Change log
 ----------
+
+### 2.1.0 ###
+
+* Add `glob` option for more glob configurations.
 
 ### 2.0.0 ###
 
