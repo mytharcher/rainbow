@@ -3,7 +3,7 @@ Rainbow
 
 [简体中文](http://yanjunyi.com/blog/posts/npm-rainbow)
 
-A node [Express][] router middleware for Ajax RESTful API base on certain folder path.
+A node [Express][] router middleware for RESTful API base on certain folder path.
 
 Rainbow mapping all HTTP request route to controllers folder each as path to file as URL.
 
