@@ -1,6 +1,6 @@
 var express = require('express');
 var rainbow = require('../../');
-
+var path = require('path');
 
 
 var app = express();
@@ -13,6 +13,10 @@ app.use('/api', rainbow({
 			'**.spec.js'
 		]
 	}
+}));
+
+app.use('/api/abs', rainbow({
+  controllers: path.join(__dirname, 'controllers'),
 }));
 
 var server;

@@ -108,5 +108,14 @@ describe('ignored controller files', function () {
 			assert.equal(http.response.status, 404);
 		}).then(done);
 	});
+});
 
+describe('option controllers as absolute path', function () {
+	it('GET /abs/all.filters method should get the value', function (done) {
+		request.get('/abs/all.filters').then(function (res) {
+			assert.equal(res.status, 200);
+		}).catch(function (http) {
+			console.error(http.response.status);
+		}).then(done);
+	});
 });
