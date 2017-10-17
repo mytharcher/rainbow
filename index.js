@@ -19,22 +19,25 @@ function joinParam (url, param) {
 
 /**
  * Main function to initialize routers of a Express app.
- * 
+ *
  * @param  {Object} paths (optional) For configure relative paths of
  *                        controllers rather than defaults.
  */
 module.exports = function (options = {}) {
 	var middleware = express.Router();
-	var ctrlDir = path.join(path.dirname(module.parent.filename), options.controllers || 'controllers');
+	var optionControllers = options.controllers || 'controllers';
+	var ctrlDir = path.isAbsolute(optionControllers) ?
+		optionControllers :
+    path.join(path.dirname(module.parent.filename), optionControllers);
 	var keyRE = new RegExp('(' + methods.join('|') + ')(?:\\s+((?:\\/(.+)\\/)|([^\\/].*[^\\/])))?', 'i');
 	var globOptions = options.glob || {};
-	
+
 	glob.sync(ctrlDir + "/**/*.js", globOptions).forEach(function (file) {
 		file = file.replace(/\.[^.]*$/, '');
 
 		var instance = require(file);
 		var url = file.replace(ctrlDir, '').replace(/\/index$/, '/');
-		
+
 		Object.keys(instance).forEach(function (key) {
 			if (key === 'filters') {
 				return;
