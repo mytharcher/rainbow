@@ -1,3 +1,5 @@
+delete require.cache[__filename];
+
 var path = require('path');
 
 var glob = require('glob');

@@ -222,6 +222,10 @@ app.use(rainbow({
 Change log
 ----------
 
+### 2.1.1 ###
+
+* Fix #6: chaining express application requiring controller path issue caused by node module cache. So that rainbow cannot be cached when using multi requiring.
+
 ### 2.1.0 ###
 
 * Add `glob` option for more glob configurations.
