@@ -203,7 +203,7 @@ app.use(rainbow({
 }));
 ~~~
 
-Path option here is **RELATIVE** path to your `app.js` file!
+Path option here supports both **RELATIVE** and **ABSOLUTE** path. The relative path will be calculated base on your `app.js` file.
 
 ### Glob ###
 
@@ -221,6 +221,10 @@ app.use(rainbow({
 
 Change log
 ----------
+
+### 2.2.0 ###
+
+* Add both absolute and relative controller path configuration support.
 
 ### 2.1.1 ###
 
