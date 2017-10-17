@@ -28,7 +28,7 @@ module.exports = function (options = {}) {
 	var optionControllers = options.controllers || 'controllers';
 	var ctrlDir = path.isAbsolute(optionControllers) ?
 		optionControllers :
-    path.join(path.dirname(module.parent.filename), optionControllers);
+		path.join(path.dirname(module.parent.filename), optionControllers);
 	var keyRE = new RegExp('(' + methods.join('|') + ')(?:\\s+((?:\\/(.+)\\/)|([^\\/].*[^\\/])))?', 'i');
 	var globOptions = options.glob || {};
 
