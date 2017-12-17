@@ -11,8 +11,8 @@ function joinParam (url, param) {
 	if (typeof param == 'string') {
 		ret = path.join(url, param);
 	} else if (param instanceof RegExp) {
-		ret = new RegExp('^' + url.replace(/([\.\-])/g, '\\$1') + '/' +
-			param.toString().replace(/^\/(\\\/)*|\/$/g, '') + '$');
+		ret = new RegExp(url.replace(/([\.\-])/g, '\\$1') + '/' +
+			param.toString().replace(/^\/(\\\/)*|\/$/g, ''));
 	}
 	return ret;
 }
@@ -24,7 +24,9 @@ function joinParam (url, param) {
  *                        controllers rather than defaults.
  */
 module.exports = function (options = {}) {
-	var middleware = express.Router();
+	var middleware = express.Router({
+		strict: options.strict
+	});
 	var optionControllers = options.controllers || 'controllers';
 	var ctrlDir = path.isAbsolute(optionControllers) ?
 		optionControllers :
@@ -36,7 +38,7 @@ module.exports = function (options = {}) {
 		file = file.replace(/\.[^.]*$/, '');
 
 		var instance = require(file);
-		var url = file.replace(ctrlDir, '').replace(/\/index$/, '/');
+		var url = file.replace(ctrlDir, '').replace(/\/index$/, '');
 
 		Object.keys(instance).forEach(function (key) {
 			if (key === 'filters') {
@@ -46,25 +48,30 @@ module.exports = function (options = {}) {
 			var matcher = key.match(keyRE);
 
 			if (!matcher) {
-				return console.error('[rainbow]: Router key pattern "%s" is invalid.', key);
+				return console.warn('[rainbow]: Router key pattern "%s" is invalid.', key);
 			}
 
 			var method = matcher[1].toLowerCase();
 
 			if (methods.indexOf(method) === -1 && method !== 'all') {
-				return console.error('[rainbow]: Unknown HTTP method "%s".', method);
+				return console.warn('[rainbow]: Unknown HTTP method "%s".', method);
 			}
 
 			if (typeof middleware[method] !== 'function') {
-				return console.error('[rainbow]: HTTP method "%s" is not supported.', method);
+				return console.warn('[rainbow]: HTTP method "%s" is not supported.', method);
 			}
 
 			var router = instance[key];
 			var filters = (instance.filters || []).concat(router.filters || []);
 			var chain = filters.concat(router instanceof Array ? router : [router]);
-			var params = matcher[2] ?
-				(matcher[3] ? new RegExp(matcher[3]) : matcher[4]) :
-				router.params;
+			var params = router.params;
+			if (matcher[2]) {
+				if (matcher[3]) {
+					params = new RegExp(matcher[3]);
+				} else {
+					params = matcher[4];
+				}
+			}
 			var pathname = joinParam(url, params);
 
 			middleware[method].apply(middleware, [pathname].concat(chain));

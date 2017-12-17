@@ -5,6 +5,8 @@ var path = require('path');
 
 var app = express();
 
+
+
 app.use('/api', rainbow({
 	controllers: 'controllers',
 	glob: {
@@ -17,6 +19,7 @@ app.use('/api', rainbow({
 
 app.use('/api/abs', rainbow({
   controllers: path.join(__dirname, 'controllers'),
+  strict: true
 }));
 
 var server;
