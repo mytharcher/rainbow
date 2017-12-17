@@ -219,6 +219,14 @@ app.use(rainbow({
 }));
 ~~~
 
+### Express router options ###
+
+From v2.3.0 rainbow added [express router option](http://expressjs.com/en/api.html#express.router) `strict` into options, default to `false`.
+
+~~~javascript
+app.use(rainbow({ strict: true }));
+~~~
+
 Change log
 ----------
 
