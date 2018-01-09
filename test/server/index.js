@@ -11,8 +11,8 @@ app.use('/api', rainbow({
 	controllers: 'controllers',
 	glob: {
 		ignore: [
-			'ignore.me.js',
-			'**.spec.js'
+			'**/ignore.me.js',
+			'**/*.spec.js'
 		]
 	}
 }));
@@ -21,6 +21,8 @@ app.use('/api/abs', rainbow({
   controllers: path.join(__dirname, 'controllers'),
   strict: true
 }));
+
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 var server;
 
