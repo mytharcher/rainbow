@@ -11,8 +11,8 @@ function joinParam (url, param) {
 	if (typeof param == 'string') {
 		ret = path.join(url, param);
 	} else if (param instanceof RegExp) {
-		ret = new RegExp(url.replace(/([\.\-])/g, '\\$1') + '/' +
-			param.toString().replace(/^\/(\\\/)*|\/$/g, ''));
+		ret = new RegExp('^' + url.replace(/([\.\-])/g, '\\$1') + '/' +
+			param.toString().replace(/^\/(\\\/)*|\/$/g, '') + '$');
 	}
 	return ret;
 }
