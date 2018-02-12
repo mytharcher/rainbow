@@ -134,7 +134,7 @@ exports.GET = function (req, res) {
 exports.GET.params = /(\d+)(?:\.\.(\d+))?/;
 ~~~
 
-But make sure no regular expression `^` used as starter and `$` as ender, or rainbow could not resolve the expression correctly. And be ware of the tailing slash when using `.params` definition, the `GET /resource` will be not found, while `GET /resources/` would be match.
+But make sure no regular expression `^` used as starter and `$` as ender, or rainbow could not resolve the expression correctly. And be aware of the tailing slash when using `.params` definition, the `GET /resource` will be not found, while `GET /resources/` would be match.
 
 Filters
 ----------
